@@ -1,3 +1,5 @@
+package com.ll;
+
 import com.ll.db.DBConnection;
 import com.ll.member.Member;
 
