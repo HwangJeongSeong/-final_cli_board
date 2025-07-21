@@ -1,5 +1,7 @@
 package com.ll;
 
+import com.ll.member.Member;
+
 public class Session {
     private static Member loggedInMember = null;
 
