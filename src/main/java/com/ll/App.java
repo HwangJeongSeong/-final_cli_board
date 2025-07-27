@@ -2,22 +2,25 @@ package com.ll;
 
 import com.ll.article.ArticleController;
 import com.ll.db.DBConnection;
+import com.ll.member.MemberController;
 import com.ll.system.SystemController;
 
 public class App {
-    ArticleController articleController;
-    SystemController systemController;
+    private final ArticleController articleController;
+    private final SystemController systemController;
+    private final MemberController memberController;
 
-    App() {
+    public App() {
         DBConnection.DB_NAME = "proj1";
         DBConnection.DB_PORT = 3306;
         DBConnection.DB_USER = "root";
         DBConnection.DB_PASSWORD = "";
 
-        Container.getDBConnection().connect();
+        Container.init();
 
         articleController = new ArticleController();
         systemController = new SystemController();
+        memberController = new MemberController();
     }
 
     public void run() {
@@ -27,20 +30,37 @@ public class App {
             System.out.print("명령) ");
             String command = Container.getSc().nextLine().trim();
 
-            // 커맨드에 입력한 내용을 actionCode, idx로 분류해서 필드로 저장
-            Request request = new Request(command);
+            if (command.isEmpty()) continue;
 
-            if (request.getActionCode().equals("종료")) {
-                systemController.exit();
-                break;
-            } else if (request.getActionCode().equals("등록")) {
-                articleController.write();
-            } else if (request.getActionCode().equals("목록")) {
-               articleController.list();
-            } else if (request.getActionCode().startsWith("삭제")) {
-                articleController.delete(request);
-            } else if (request.getActionCode().startsWith("수정")) {
-                articleController.modify(request);
+            Request request = new Request(command);
+            String action = request.getActionCode();
+
+            switch (action) {
+                case "종료" -> {
+                    systemController.exit();
+                    Container.close();
+                    return;
+                }
+                case "등록" -> {
+                    if (!Session.isLoggedIn()) {
+                        System.out.println("로그인 후 이용해주세요.");
+                        break;
+                    }
+                    articleController.write();
+                }
+                case "목록" -> articleController.list();
+                case "회원가입" -> memberController.join();
+                case "로그인" -> memberController.login();
+                case "로그아웃" -> memberController.logout();
+                default -> {
+                    if (action.startsWith("삭제")) {
+                        articleController.delete(request);
+                    } else if (action.startsWith("수정")) {
+                        articleController.modify(request);
+                    } else {
+                        System.out.println("알 수 없는 명령입니다.");
+                    }
+                }
             }
         }
     }

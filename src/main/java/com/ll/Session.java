@@ -6,6 +6,7 @@ public class Session {
     private static Member loggedInMember = null;
 
     public static void login(Member member) {
+        if (member == null) throw new IllegalArgumentException("member는 null안됨");
         loggedInMember = member;
     }
 
