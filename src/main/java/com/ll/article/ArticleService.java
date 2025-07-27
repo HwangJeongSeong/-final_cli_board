@@ -1,5 +1,7 @@
 package com.ll.article;
 
+import com.ll.Session;
+
 import java.util.List;
 
 public class ArticleService {
@@ -10,8 +12,10 @@ public class ArticleService {
     }
 
     public int create(String subject, String content) {
-        return articleRepository.create(subject, content);
+        int memberId = Session.getLoggedInMember().getId(); // ✅ 로그인된 사용자 ID
+        return articleRepository.create(subject, content, memberId);
     }
+
 
     public List<Article> findAll() {
         return articleRepository.findAll();

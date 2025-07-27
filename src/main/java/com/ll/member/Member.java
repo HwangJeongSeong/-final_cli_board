@@ -12,7 +12,9 @@ public class Member {
         this.id = (int) row.get("id");
         this.userId = (String) row.get("userId");
         this.password = (String) row.get("password");
-        this.regDate = (String) row.get("regDate");
+        Object regDateObj = row.get("regDate");
+        this.regDate = regDateObj != null ? regDateObj.toString() : null;
+
     }
 
     public int getId() {

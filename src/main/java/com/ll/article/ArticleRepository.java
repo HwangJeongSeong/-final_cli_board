@@ -6,15 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.ll.Util.escape;
+
 public class ArticleRepository {
     int lastId = 1;
 
-    public int create(String subject, String content) {
-        String sql = String.format("insert into article set subject='%s', content='%s'", subject, content);
-        int id = Container.getDBConnection().insert(sql);
-
-        return id;
+    public int create(String subject, String content, int memberId) {
+        String sql = String.format(
+                "INSERT INTO article SET subject='%s', content='%s', memberId=%d, created_date=NOW(), modified_date=NOW()",
+                escape(subject), escape(content), memberId
+        );
+        return Container.getDBConnection().insert(sql);
     }
+
 
     public List<Article> findAll() {
         List<Article> articleList = new ArrayList<>();

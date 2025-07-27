@@ -2,6 +2,7 @@ package com.ll.member;
 
 import com.ll.Container;
 import com.ll.Request;
+import com.ll.Session;
 
 import java.util.Scanner;
 
@@ -48,7 +49,7 @@ public class MemberController {
             return;
         }
 
-        loginedMember = member;
+        Session.login(member);
         System.out.printf("%s님 환영합니다.\n", member.getUserId());
     }
 
