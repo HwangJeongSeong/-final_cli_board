@@ -4,7 +4,7 @@ USE proj1;
 
 CREATE TABLE article (
   id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  title CHAR(100) NOT NULL UNIQUE,
+  subject CHAR(100) NOT NULL UNIQUE,
   content TEXT,
   memberId INT UNSIGNED NOT NULL, -- FK 선언 없음
   boardType CHAR(20) NOT NULL,
@@ -24,5 +24,7 @@ CREATE TABLE member (
   created_date DATETIME NOT NULL DEFAULT NOW(),
   modified_date DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW()
 );
+
+ALTER TABLE article MODIFY boardType CHAR(20) NOT NULL DEFAULT 'free';
 
 SELECT * FROM member;
